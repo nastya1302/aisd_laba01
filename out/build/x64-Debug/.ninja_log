@@ -1,0 +1,6 @@
+# ninja log v5
+7	165	7210000164476392	CMakeFiles/Matrix.dir/src/Matrix.cc.obj	e6c3360152d31f04
+167	1639	7210000178736194	Matrix.dll	c9d7a1a2e0765b3f
+167	1639	7210000178736194	Matrix.lib	c9d7a1a2e0765b3f
+28	2385	7210000186727938	CMakeFiles/console_m.dir/console/console_m.cc.obj	91bb3c51fc1c8c36
+2385	3563	7210000197974164	console_m.exe	64a1b4fb686a14fc

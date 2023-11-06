@@ -18,7 +18,7 @@ if(MSVC)
 endif()
 
 # Объявляем библиотеку
-add_library(Matrix SHARED "include/Matrix/Matrix.h" "src/Matrix.cc")
+add_library(Matrix SHARED "include/Matrix.h" "src/Matrix.cc")
 target_include_directories(Matrix PUBLIC "include")
 
 # Подключаем googletest
