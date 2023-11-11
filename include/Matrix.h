@@ -2,10 +2,10 @@
 #include <iostream>
 #include <random>
 #include <complex>
-#include <exception>
 #include <math.h>
 #include <iomanip>
 #include <cstdlib>
+#include <stdexcept>
 
 using namespace std;
 
@@ -125,9 +125,6 @@ namespace matrix {
 						array[i][j] = _array[_size];
 						_size++;
 					}
-					else {
-						array[i][j] = 0;
-					}
 			}
 		}
 
@@ -137,7 +134,7 @@ namespace matrix {
 
 		Matrix& operator+=(const Matrix& _array) {
 			if (rows != _array.rows || cols != _array.cols)
-				throw "The sizes of the matrices do not match";
+				throw std::invalid_argument("The sizes of the matrices do not match");
 			else {
 				for (int i = 0; i < rows; i++)
 					for (int j = 0; j < cols; j++)
@@ -148,7 +145,7 @@ namespace matrix {
 
 		Matrix& operator-=(const Matrix& _array) {
 			if (rows != _array.rows || cols != _array.cols)
-				throw "The sizes of the matrices do not match";
+				throw std::invalid_argument("The sizes of the matrices do not match");
 			else {
 				for (int i = 0; i < rows; i++)
 					for (int j = 0; j < cols; j++)
@@ -159,7 +156,7 @@ namespace matrix {
 
 		friend Matrix operator+(Matrix& array, const Matrix& _array) {
 			if (array.rows != _array.rows || array.cols != _array.cols)
-				throw "The sizes of the matrices do not match";
+				throw std::invalid_argument("The sizes of the matrices do not match");
 			else {
 				Matrix c(array);
 				c += _array;
@@ -169,7 +166,7 @@ namespace matrix {
 
 		friend Matrix operator-(Matrix& array, const Matrix& _array) {
 			if (array.rows != _array.rows || array.cols != _array.cols)
-				throw "The sizes of the matrices do not match";
+				throw std::invalid_argument("The sizes of the matrices do not match");
 			else {
 				Matrix c(array);
 				c -= _array;
@@ -179,24 +176,20 @@ namespace matrix {
 
 		friend Matrix operator*(Matrix& _array, const Matrix& array) {
 			if (array.rows != _array.cols || array.cols != _array.rows)
-				throw "The size of the matrices does not satisfy the multiplication condition";
+				throw std::invalid_argument("The size of the matrices does not satisfy the multiplication condition");
 			else {
 				Matrix a(array.rows, _array.cols);
 				for (int i = 0; i < array.rows; ++i)
-				{
 					for (int j = 0; j < _array.cols; ++j)
-					{
-						a(i, j) = 0;
 						for (int k = 0; k < array.cols; ++k) {
 							a(i, j) += array(i, k) * _array(k, j);
+							return a;
+
 						}
-					}
-				}
-				return a;
 			}
-		}
+			}
 
-		friend Matrix operator*(Matrix& array, T scalar) {
+		friend Matrix operator*(Matrix & array, T scalar) {
 			Matrix _array(array);
 			for (int i = 0; i < _array.rows; i++) {
 				for (int j = 0; j < _array.cols; j++) {
@@ -206,7 +199,7 @@ namespace matrix {
 			return _array;
 		}
 
-		friend Matrix operator*(T scalar, Matrix& array) {
+		friend Matrix operator*(T scalar, Matrix & array) {
 			Matrix _array(array);
 			for (int i = 0; i < _array.rows; i++) {
 				for (int j = 0; j < _array.cols; j++) {
@@ -216,9 +209,9 @@ namespace matrix {
 			return _array;
 		}
 
-		friend Matrix operator/(Matrix& array, T scalar) {
+		friend Matrix operator/(Matrix & array, T scalar) {
 			if (scalar == T(0))
-				throw "You can't divide by zero!";
+				throw std::exception("Division by zero");
 			else {
 				Matrix _array(array);
 				for (int i = 0; i < _array.rows; i++)
@@ -230,75 +223,72 @@ namespace matrix {
 
 		T trace_matrix() {
 			if (rows != cols)
-				throw "The matrix must be square";
+				throw std::invalid_argument("The matrix must be square");
 			else {
 				T trace = 0;
 				for (int i = 0; i < rows; i++)
-					for (int j = 0; j < cols; j++)
-						trace += array[i][j];
+					trace += array[i][i];
 				return trace;
 			}
 		}
 
-		T determinate_matrix() {
-			if (rows != cols)
-				throw "The matrix must be square.";
-			else if (rows == 1)
-				return array[0][0];
-			else if (rows == 2)
-				return array[0][0] * array[1][1] - array[0][1] * array[1][0];
-			else if (rows == 3)
-				return array[0][0] * array[1][1] * array[2][2] + array[0][1] * array[1][2] * array[2][0] + array[0][2] * array[1][0] * array[2][1] -
-				(array[2][0] * array[1][1] * array[0][2] + array[1][2] * array[2][1] * array[0][0] + array[2][2] * array[0][1] * array[1][0]);
-			else
-				throw "The size of the matrix should not exceed 3.";
-		}
-
-		void triangular_matrix() {
-			if (rows != cols)
-				throw "The matrix must be square.";
-			else if (determinate_matrix() == T(0))
-				throw "The matrix cannot be reduced to a triangular form, because it is degenerate.";
-			else {
-				/*T max = array[0][rows - 1];
-				int imax = 0;
-				for (int i = 0; i < rows; i++) {
-					if (abs(array[i][rows-1]) > max) {
-						max = abs(array[i][rows-1]);
-						imax = i;
-					}
-				}*/
-				//swap(array[rows-1], array[imax]);	
-				for (int k = rows - 1; k > 0; k--) {
-					for (int i = k - 1; i > -1; i--) {
-						T m = -array[i][k] / array[k][k];
-						for (int j = 0; j < rows; j++) {
-							array[i][j] += array[k][j] * m;
-						}
-					}
-				}
-			}
-		}
-
-		bool operator ==(Matrix& _array) const {
+		bool operator ==(Matrix & _array) const {
 			if (cols != _array.cols || rows != _array.rows)
 				return false;
 			else {
-				for (int i = 0; i < rows; i++) {
-					for (int j = 0; j < rows; j++) {
-						if (array[i][j] == _array[i][j])
-							return true;
-					}
-				}
-				return false;
+				for (int i = 0; i < rows; i++)
+					for (int j = 0; j < rows; j++)
+						if (array[i][j] != _array[i][j])
+							return false;
 			}
+			return true;
 		}
 
-		bool operator!=(Matrix& _array) const {
+		bool operator!=(Matrix & _array) const {
 			return !(array == _array);
 		}
 	};
 
+	template<typename T>
+	T determinate_matrix(Matrix<T>& _array) {
+		if (_array.get_row() != _array.get_col())
+			throw std::invalid_argument("The matrix must be square.");
+		else if (_array.get_row() == 1)
+			return _array(0, 0);
+		else if (_array.get_row() == 2)
+			return _array(0, 0) * _array(1, 1) - _array(0, 1) * _array(1, 0);
+		else if (_array.get_row() == 3)
+			return _array(0, 0) * _array(1, 1) * _array(2, 2) + _array(0, 1) * _array(1, 2) * _array(2, 0) + _array(0, 2) * _array(1, 0) * _array(2, 1) -
+			(_array(2, 0) * _array(1, 1) * _array(0, 2) + _array(1, 2) * _array(2, 1) * _array(0, 0) + _array(2, 2) * _array(0, 1) * _array(1, 0));
+		else
+			throw std::invalid_argument("The size of the matrix should not exceed 3.");
+	}
+
+	template<typename T>
+	void triangular_matrix(Matrix<T>& _array) {
+		if (_array.get_row() != _array.get_col())
+			throw std::invalid_argument("The matrix must be square.");
+		else if (determinate_matrix(_array) == T(0))
+			throw std::invalid_argument("The matrix cannot be reduced to a triangular form, because it is degenerate.");
+		else {
+			/*T max = array[0][rows - 1];
+			int imax = 0;
+			for (int i = 0; i < rows; i++) {
+				if (abs(array[i][rows-1]) > max) {
+					max = abs(array[i][rows-1]);
+					imax = i;
+				}
+			}*/
+			//swap(array[rows-1], array[imax]);	
+			for (int k = _array.get_row() - 1; k > 0; k--) {
+				for (int i = k - 1; i > -1; i--) {
+					T m = -_array(i, k) / _array(k, k);
+					for (int j = 0; j < _array.get_row(); j++)
+						_array(i, j) += _array(k, j) * m;
+				}
+			}
+		}
+	}
 
 	template<typename T>
 	ostream& operator<<(ostream& os, Matrix<T>& a) {
@@ -314,4 +304,23 @@ namespace matrix {
 		return os;
 	}
 
+	template<typename T>
+	bool operator==(Matrix<complex<T>>& array1, Matrix<complex<T>>& array2) {
+		if (array1.get_row() != array2.get_row() || array1.get_col() != array2.get_col())
+			return false;
+		else {
+			for (int i = 0; i < array1.get_row(); i++) {
+				for (int j = 0; j < array1.get_col(); j++) {
+					if (array1(i, j).real() != array2(i, j).real() || array1(i, j).imag() != array2(i, j).imag())
+						return false;
+				}
+			}
+			return true;
+		}
+	}
+
+	template<typename T>
+	bool operator!=(Matrix<complex<T>>& array1, Matrix<complex<T>>& array2) {
+		return !(array1 == array2);
+	}
 }

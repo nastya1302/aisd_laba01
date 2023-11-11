@@ -6,15 +6,16 @@ using namespace matrix;
 
 int main() {
 	/*cout << "data type: INT" << endl;
-	int array1[] = { 1,2,1,1, 1, 2, 4, 5, 3 };
+	int array1[] = { 1,2,1,1,1,2,4,5,3 };
 	Matrix<int> a(3, 3, array1, 9);
-	int array2[] = { 1,2,1,3,1,4,2,1,3 };
-	Matrix<int> b(3, 3, array2, 9);
+	int array2[] = { 1,2,1,3 };
+	Matrix<int> b(2, 2, array2, 4);
 	cout << "First matrix a: " << a;
 	cout << "Second matrix b: " << b;
-	Matrix<int> c = a + b;
-	cout << "a+b" << c;
-	c = a - b;
+	//Matrix<int> c = a + b;
+	a += b;
+	cout << "a+b" << a;
+	/*c = a - b;
 	cout << "a-b" << c;
 	c = a * b;
 	cout << "a*b" << c;
@@ -31,8 +32,8 @@ int main() {
 	int array3[] = { 1,1,2,1 };
 	Matrix<int> arr(2, 2, array3, 9);
 	cout << "Third matrix 'arr': " << arr;
-	arr.triangular_matrix();
-	cout << "Triangular matrix arr is " << arr;*/
+	triangular_matrix(arr);
+	cout << "Triangular matrix arr is " << arr;
 
 	/*cout << "data type: DOUBLE" << endl;
 	double array1[] = { 1.5,2,1,1, 1, 2, 4, 5, 3 };
@@ -82,7 +83,7 @@ int main() {
 	cout << "a / 2" << array3;
 	complex<float> trace = array1.trace_matrix();
 	cout << "Trace matrix 'a' is " << trace << endl;
-	array1.triangular_matrix();
+	triangular_matrix(array1);
 	cout << "Triangular matrix 'a' is " << array1;*/
 	return 0;
 }
