@@ -1,7 +1,5 @@
 #pragma once
-#include <atlstr.h>
 #include <iostream>
-#include <ctime>
 #include <random>
 #include <complex>
 #include <math.h>
@@ -113,21 +111,32 @@ namespace matrix {
 			}
 		}
 
+		bool check(int _rows, int _cols, int _size) {
+			if ((_rows * _cols) != _size)
+				return false;
+			return true;
+		}
+
 		Matrix(int _rows, int _cols, T _array[], int size) {
-			rows = _rows;
-			cols = _cols;
-			array = (T**) new T * [rows];
-			for (int i = 0; i < rows; i++) {
-				array[i] = (T*)new T[cols];
-			}
-			int _size = 0;
-			for (int i = 0; i < rows; i++) {
-				for (int j = 0; j < cols; j++)
-					if (_size < size) {
-						array[i][j] = _array[_size];
-						_size++;
+			if (check(_rows, _cols, size)) {
+				rows = _rows;
+				cols = _cols;
+				array = (T**) new T * [rows];
+				for (int i = 0; i < rows; i++) {
+					array[i] = (T*)new T[cols];
+				}
+				int _size = 0;
+				for (int i = 0; i < rows; i++) {
+					for (int j = 0; j < cols; j++) {
+						if (_size < size) {
+							array[i][j] = _array[_size];
+							_size++;
+						}
 					}
+				}
 			}
+			else
+				throw std::invalid_argument("The sizes of the matrices do not match");
 		}
 
 		T& operator()(const int _index_row, const int _index_col) const {
@@ -359,10 +368,4 @@ namespace matrix {
 	bool operator!=(Matrix<complex<T>>& array1, Matrix<complex<T>>& array2) {
 		return !(array1 == array2);
 	}
-
-	/*std::generate(std::execution::par_unseq, inputData.begin(), inputData.end(), []()-> Complex {
-		thread_local std::default_random_engine generator; // thread_local so we don't have to do any locking
-		thread_local std::normal_distribution<double> distribution(0.0, 0.5); // mean = 0.0, stddev = 0.5
-		return Complex(distribution(generator), distribution(generator));
-		});*/
 }
