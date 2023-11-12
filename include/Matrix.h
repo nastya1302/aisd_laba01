@@ -1,5 +1,7 @@
 #pragma once
+#include <atlstr.h>
 #include <iostream>
+#include <ctime>
 #include <random>
 #include <complex>
 #include <math.h>
@@ -10,13 +12,13 @@
 using namespace std;
 
 namespace matrix {
-
 	template <typename T>
 	class Matrix {
 	private:
 		T** array;
 		int rows;
 		int cols;
+		const double epsilon = 0.000001;
 
 	public:
 		Matrix() {
@@ -179,15 +181,16 @@ namespace matrix {
 				throw std::invalid_argument("The size of the matrices does not satisfy the multiplication condition");
 			else {
 				Matrix a(array.rows, _array.cols);
-				for (int i = 0; i < array.rows; ++i)
-					for (int j = 0; j < _array.cols; ++j)
+				for (int i = 0; i < array.rows; ++i) {
+					for (int j = 0; j < _array.cols; ++j) {
 						for (int k = 0; k < array.cols; ++k) {
 							a(i, j) += array(i, k) * _array(k, j);
-							return a;
-
 						}
+					}
+				}
+				return a;
 			}
-			}
+		}
 
 		friend Matrix operator*(Matrix & array, T scalar) {
 			Matrix _array(array);
@@ -216,7 +219,7 @@ namespace matrix {
 				Matrix _array(array);
 				for (int i = 0; i < _array.rows; i++)
 					for (int j = 0; j < _array.cols; j++)
-						_array.array[i][j] = _array.array[i][j] / scalar;
+						_array.array[i][j] /= scalar;
 				return _array;
 			}
 		}
@@ -238,7 +241,7 @@ namespace matrix {
 			else {
 				for (int i = 0; i < rows; i++)
 					for (int j = 0; j < rows; j++)
-						if (array[i][j] != _array[i][j])
+						if (abs(array[i][j] - _array[i][j]) > epsilon)
 							return false;
 			}
 			return true;
@@ -247,6 +250,39 @@ namespace matrix {
 		bool operator!=(Matrix & _array) const {
 			return !(array == _array);
 		}
+
+		template<typename U>
+		Matrix(int _rows, int _cols, U bottom_limit_real, U upper_limit_real, U bottom_limit_imag, U upper_limit_imag) {
+			rows = _rows;
+			cols = _cols;
+			array = (T**) new T*[rows];
+			for (int i = 0; i < rows; i++) {
+				array[i] = (T*) new T[cols];
+			}
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
+					array[i][j] = complex((bottom_limit_real + rand() % (upper_limit_real - bottom_limit_real)), (bottom_limit_imag + rand() % (upper_limit_imag - bottom_limit_imag)));
+				}
+			}
+		}
+		/*
+		template<typename U>
+		U random_number(U min, U max) {
+			std::mt19937 mt{ std::random_device{}() };
+			std::uniform_real_distribution<U> dist;
+			using pick = std::uniform_real_distribution<U>::param_type;
+			return dist(mt, pick(min, max));
+			//std::chrono::system_clock::now().time_since_epoch().count();
+			//std::default_random_engine generator(seed);
+			//std::uniform_real_distribution<T> distribution(bottom_limit, upper_limit);
+			//T number = distribution(generator);
+			//return number;
+			//random_device rd;
+			//mt19937 gen(rd());
+			//uniform_real_distribution<> segment(bottom_limit, upper_limit);
+			//return segment(gen);
+		
+		}*/
 	};
 
 	template<typename T>
@@ -323,4 +359,10 @@ namespace matrix {
 	bool operator!=(Matrix<complex<T>>& array1, Matrix<complex<T>>& array2) {
 		return !(array1 == array2);
 	}
+
+	/*std::generate(std::execution::par_unseq, inputData.begin(), inputData.end(), []()-> Complex {
+		thread_local std::default_random_engine generator; // thread_local so we don't have to do any locking
+		thread_local std::normal_distribution<double> distribution(0.0, 0.5); // mean = 0.0, stddev = 0.5
+		return Complex(distribution(generator), distribution(generator));
+		});*/
 }

@@ -5,17 +5,20 @@ using namespace std;
 using namespace matrix;
 
 int main() {
-	/*cout << "data type: INT" << endl;
+	//Matrix<complex<double>> array(2, 2, 0, 10, 0, 10);
+	//cout << array;
+
+	cout << "data type: INT" << endl;
 	int array1[] = { 1,2,1,1,1,2,4,5,3 };
 	Matrix<int> a(3, 3, array1, 9);
-	int array2[] = { 1,2,1,3 };
-	Matrix<int> b(2, 2, array2, 4);
+	int array2[] = { 1,2,1,3,1,2,3,4,1 };
+	Matrix<int> b(3, 3, array2,9);
 	cout << "First matrix a: " << a;
 	cout << "Second matrix b: " << b;
-	//Matrix<int> c = a + b;
+	Matrix<int> c = a + b;
 	a += b;
 	cout << "a+b" << a;
-	/*c = a - b;
+	c = a - b;
 	cout << "a-b" << c;
 	c = a * b;
 	cout << "a*b" << c;
@@ -58,7 +61,7 @@ int main() {
 	cout << "Random matrix 3x3: " << d;
 	double trace = a.trace_matrix();
 	cout << "Trace matrix 'a' is " << trace << endl;
-	a.triangular_matrix();
+	triangular_matrix(a);
 	cout << "Triangular matrix arr is " << a;*/
 
 	/*cout << "data type: COMPLEX<FLOAT>" << endl;
@@ -81,6 +84,8 @@ int main() {
 	cout << "2*b" << array3;
 	array3 = array1 / 2;
 	cout << "a / 2" << array3;
+	Matrix<std::complex<float>> arr(3, 3, 1, 100, 1, 100);
+	cout << "Random matrix 3x3: " << arr;
 	complex<float> trace = array1.trace_matrix();
 	cout << "Trace matrix 'a' is " << trace << endl;
 	triangular_matrix(array1);
