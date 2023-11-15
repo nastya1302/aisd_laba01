@@ -4,7 +4,6 @@
 #include <complex>
 #include <math.h>
 #include <iomanip>
-#include <cstdlib>
 #include <stdexcept>
 
 using namespace std;
@@ -29,28 +28,22 @@ namespace matrix {
 			rows = _rows;
 			cols = _cols;
 			array = (T**) new T * [rows];
-			for (int i = 0; i < rows; i++) {
+			for (int i = 0; i < rows; i++) 
 				array[i] = (T*) new T[cols];
-			}
-			for (int i = 0; i < rows; i++) {
-				for (int j = 0; j < cols; j++) {
+			for (int i = 0; i < rows; i++)
+				for (int j = 0; j < cols; j++) 
 					array[i][j] = 0;
-				}
-			}
 		}
 
 		Matrix(const Matrix& _array) {
 			rows = _array.rows;
 			cols = _array.cols;
 			array = (T**) new T * [rows];
-			for (int i = 0; i < rows; i++) {
+			for (int i = 0; i < rows; i++)
 				array[i] = (T*) new T[cols];
-			}
-			for (int i = 0; i < rows; i++) {
-				for (int j = 0; j < cols; j++) {
+			for (int i = 0; i < rows; i++) 
+				for (int j = 0; j < cols; j++) 
 					array[i][j] = _array.array[i][j]; ;
-				}
-			}
 		}
 
 		Matrix& operator=(const Matrix& _array) {
@@ -60,14 +53,11 @@ namespace matrix {
 			rows = _array.rows;
 			cols = _array.cols;
 			array = (T**) new T * [rows];
-			for (int i = 0; i < rows; i++) {
+			for (int i = 0; i < rows; i++)
 				array[i] = (T*) new T[cols];
-			}
-			for (int i = 0; i < rows; i++) {
-				for (int j = 0; j < cols; j++) {
-					array[i][j] = _array.array[i][j]; ;
-				}
-			}
+			for (int i = 0; i < rows; i++) 
+				for (int j = 0; j < cols; j++) 
+					array[i][j] = _array.array[i][j];
 			return *this;
 		}
 
@@ -89,9 +79,8 @@ namespace matrix {
 			rows = _rows;
 			cols = _cols;
 			array = (T**) new T * [rows];
-			for (int i = 0; i < rows; i++) {
+			for (int i = 0; i < rows; i++) 
 				array[i] = (T*)new T[cols];
-			}
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
 					random_device rd;
@@ -102,41 +91,19 @@ namespace matrix {
 			}
 		}
 
-		void init() {
+		Matrix(int _rows, int _cols, T _array[]) {
+			rows = _rows;
+			cols = _cols;
+			array = (T**) new T * [rows];
+			for (int i = 0; i < rows; i++) 
+				array[i] = (T*)new T[cols];
+			int _size = 0;
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
-					cout << "[" << i << "][" << j << "]";
-					cin >> array[i][j] << endl;
+					array[i][j] = _array[_size];
+					_size++;
 				}
 			}
-		}
-
-		bool check(int _rows, int _cols, int _size) {
-			if ((_rows * _cols) != _size)
-				return false;
-			return true;
-		}
-
-		Matrix(int _rows, int _cols, T _array[], int size) {
-			if (check(_rows, _cols, size)) {
-				rows = _rows;
-				cols = _cols;
-				array = (T**) new T * [rows];
-				for (int i = 0; i < rows; i++) {
-					array[i] = (T*)new T[cols];
-				}
-				int _size = 0;
-				for (int i = 0; i < rows; i++) {
-					for (int j = 0; j < cols; j++) {
-						if (_size < size) {
-							array[i][j] = _array[_size];
-							_size++;
-						}
-					}
-				}
-			}
-			else
-				throw std::invalid_argument("The sizes of the matrices do not match");
 		}
 
 		T& operator()(const int _index_row, const int _index_col) const {
@@ -145,7 +112,7 @@ namespace matrix {
 
 		Matrix& operator+=(const Matrix& _array) {
 			if (rows != _array.rows || cols != _array.cols)
-				throw std::invalid_argument("The sizes of the matrices do not match");
+				throw std::invalid_argument("Matrix::The sizes of the matrices do not match");
 			else {
 				for (int i = 0; i < rows; i++)
 					for (int j = 0; j < cols; j++)
@@ -156,7 +123,7 @@ namespace matrix {
 
 		Matrix& operator-=(const Matrix& _array) {
 			if (rows != _array.rows || cols != _array.cols)
-				throw std::invalid_argument("The sizes of the matrices do not match");
+				throw std::invalid_argument("Matrix::The sizes of the matrices do not match");
 			else {
 				for (int i = 0; i < rows; i++)
 					for (int j = 0; j < cols; j++)
@@ -167,7 +134,7 @@ namespace matrix {
 
 		friend Matrix operator+(Matrix& array, const Matrix& _array) {
 			if (array.rows != _array.rows || array.cols != _array.cols)
-				throw std::invalid_argument("The sizes of the matrices do not match");
+				throw std::invalid_argument("Matrix::The sizes of the matrices do not match");
 			else {
 				Matrix c(array);
 				c += _array;
@@ -177,7 +144,7 @@ namespace matrix {
 
 		friend Matrix operator-(Matrix& array, const Matrix& _array) {
 			if (array.rows != _array.rows || array.cols != _array.cols)
-				throw std::invalid_argument("The sizes of the matrices do not match");
+				throw std::invalid_argument("Matrix::The sizes of the matrices do not match");
 			else {
 				Matrix c(array);
 				c -= _array;
@@ -187,43 +154,36 @@ namespace matrix {
 
 		friend Matrix operator*(Matrix& _array, const Matrix& array) {
 			if (array.rows != _array.cols || array.cols != _array.rows)
-				throw std::invalid_argument("The size of the matrices does not satisfy the multiplication condition");
+				throw std::invalid_argument("Matrix::The size of the matrices does not satisfy the multiplication condition");
 			else {
 				Matrix a(array.rows, _array.cols);
-				for (int i = 0; i < array.rows; ++i) {
-					for (int j = 0; j < _array.cols; ++j) {
-						for (int k = 0; k < array.cols; ++k) {
+				for (int i = 0; i < array.rows; ++i) 
+					for (int j = 0; j < _array.cols; ++j) 
+						for (int k = 0; k < array.cols; ++k) 
 							a(i, j) += array(i, k) * _array(k, j);
-						}
-					}
-				}
 				return a;
 			}
 		}
 
 		friend Matrix operator*(Matrix & array, T scalar) {
 			Matrix _array(array);
-			for (int i = 0; i < _array.rows; i++) {
-				for (int j = 0; j < _array.cols; j++) {
+			for (int i = 0; i < _array.rows; i++) 
+				for (int j = 0; j < _array.cols; j++) 
 					_array.array[i][j] = _array.array[i][j] * scalar;
-				}
-			}
 			return _array;
 		}
 
 		friend Matrix operator*(T scalar, Matrix & array) {
 			Matrix _array(array);
-			for (int i = 0; i < _array.rows; i++) {
-				for (int j = 0; j < _array.cols; j++) {
+			for (int i = 0; i < _array.rows; i++) 
+				for (int j = 0; j < _array.cols; j++)
 					_array.array[i][j] = _array.array[i][j] * scalar;
-				}
-			}
 			return _array;
 		}
 
 		friend Matrix operator/(Matrix & array, T scalar) {
 			if (scalar == T(0))
-				throw std::exception("Division by zero");
+				throw std::exception("Matrix::Division by zero");
 			else {
 				Matrix _array(array);
 				for (int i = 0; i < _array.rows; i++)
@@ -235,7 +195,7 @@ namespace matrix {
 
 		T trace_matrix() {
 			if (rows != cols)
-				throw std::invalid_argument("The matrix must be square");
+				throw std::invalid_argument("Matrix::The matrix must be square");
 			else {
 				T trace = 0;
 				for (int i = 0; i < rows; i++)
@@ -265,39 +225,19 @@ namespace matrix {
 			rows = _rows;
 			cols = _cols;
 			array = (T**) new T*[rows];
-			for (int i = 0; i < rows; i++) {
+			for (int i = 0; i < rows; i++) 
 				array[i] = (T*) new T[cols];
-			}
-			for (int i = 0; i < rows; i++) {
-				for (int j = 0; j < cols; j++) {
-					array[i][j] = complex((bottom_limit_real + rand() % (upper_limit_real - bottom_limit_real)), (bottom_limit_imag + rand() % (upper_limit_imag - bottom_limit_imag)));
-				}
-			}
+			for (int i = 0; i < rows; i++)
+				for (int j = 0; j < cols; j++) 
+					array[i][j] = complex((bottom_limit_real + rand() % (upper_limit_real - bottom_limit_real)), 
+						(bottom_limit_imag + rand() % (upper_limit_imag - bottom_limit_imag)));
 		}
-		/*
-		template<typename U>
-		U random_number(U min, U max) {
-			std::mt19937 mt{ std::random_device{}() };
-			std::uniform_real_distribution<U> dist;
-			using pick = std::uniform_real_distribution<U>::param_type;
-			return dist(mt, pick(min, max));
-			//std::chrono::system_clock::now().time_since_epoch().count();
-			//std::default_random_engine generator(seed);
-			//std::uniform_real_distribution<T> distribution(bottom_limit, upper_limit);
-			//T number = distribution(generator);
-			//return number;
-			//random_device rd;
-			//mt19937 gen(rd());
-			//uniform_real_distribution<> segment(bottom_limit, upper_limit);
-			//return segment(gen);
-		
-		}*/
 	};
 
 	template<typename T>
 	T determinate_matrix(Matrix<T>& _array) {
 		if (_array.get_row() != _array.get_col())
-			throw std::invalid_argument("The matrix must be square.");
+			throw std::invalid_argument("Matrix::The matrix must be square.");
 		else if (_array.get_row() == 1)
 			return _array(0, 0);
 		else if (_array.get_row() == 2)
@@ -306,15 +246,15 @@ namespace matrix {
 			return _array(0, 0) * _array(1, 1) * _array(2, 2) + _array(0, 1) * _array(1, 2) * _array(2, 0) + _array(0, 2) * _array(1, 0) * _array(2, 1) -
 			(_array(2, 0) * _array(1, 1) * _array(0, 2) + _array(1, 2) * _array(2, 1) * _array(0, 0) + _array(2, 2) * _array(0, 1) * _array(1, 0));
 		else
-			throw std::invalid_argument("The size of the matrix should not exceed 3.");
+			throw std::invalid_argument("Matrix::The size of the matrix should not exceed 3.");
 	}
 
 	template<typename T>
 	void triangular_matrix(Matrix<T>& _array) {
 		if (_array.get_row() != _array.get_col())
-			throw std::invalid_argument("The matrix must be square.");
+			throw std::invalid_argument("Matrix::The matrix must be square.");
 		else if (determinate_matrix(_array) == T(0))
-			throw std::invalid_argument("The matrix cannot be reduced to a triangular form, because it is degenerate.");
+			throw std::invalid_argument("Matrix::The matrix cannot be reduced to a triangular form, because it is degenerate.");
 		else {
 			/*T max = array[0][rows - 1];
 			int imax = 0;
@@ -337,14 +277,12 @@ namespace matrix {
 
 	template<typename T>
 	ostream& operator<<(ostream& os, Matrix<T>& a) {
-		for (int i = 0; i < a.get_row(); ++i)
-		{
-			cout << endl;
-			for (int j = 0; j < a.get_col(); ++j)
-			{
-				std::cout << setw(10) << a(i, j);
+		cout << endl;
+		for (int i = 0; i < a.get_row(); ++i){
+			for (int j = 0; j < a.get_col(); ++j) {
+				os << setw(10) << a(i, j);
 			}
-			cout << endl;
+			os << endl;
 		}
 		return os;
 	}
@@ -354,12 +292,10 @@ namespace matrix {
 		if (array1.get_row() != array2.get_row() || array1.get_col() != array2.get_col())
 			return false;
 		else {
-			for (int i = 0; i < array1.get_row(); i++) {
-				for (int j = 0; j < array1.get_col(); j++) {
+			for (int i = 0; i < array1.get_row(); i++) 
+				for (int j = 0; j < array1.get_col(); j++) 
 					if (array1(i, j).real() != array2(i, j).real() || array1(i, j).imag() != array2(i, j).imag())
 						return false;
-				}
-			}
 			return true;
 		}
 	}

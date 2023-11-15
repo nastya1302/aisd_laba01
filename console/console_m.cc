@@ -5,13 +5,13 @@ using namespace std;
 using namespace matrix;
 
 int main() {
-	/*cout << "data type: INT" << endl;
+	cout << "data type: INT" << endl;
 	int array1[] = { 1,2,1,1,1,2,4,5,3 };
-	int size_arr1 = sizeof(array1) / sizeof(array1[0]);
-	Matrix<int> a(3, 3, array1, size_arr1);
+	//int size_arr1 = sizeof(array1) / sizeof(array1[0]);
+	Matrix<int> a(3, 3, array1);
 	int array2[] = {1,2,1,3,1,2,3,4,1};
-	int size_arr2 = sizeof(array2) / sizeof(array2[0]);
-	Matrix<int> b(3, 3, array2, size_arr2);
+	//int size_arr2 = sizeof(array2) / sizeof(array2[0]);
+	Matrix<int> b(3, 3, array2);
 	cout << "First matrix a: " << a;
 	cout << "Second matrix b: " << b;
 	Matrix<int> c = a + b;
@@ -32,19 +32,19 @@ int main() {
 	int trace = a.trace_matrix();
 	cout << "Trace matrix 'a' is " << trace << endl;
 	int array3[] = { 1,1,2,1 };
-	int size_arr3 = sizeof(array3) / sizeof(array3[0]);
-	Matrix<int> arr(2, 2, array3, size_arr3);
+	//int size_arr3 = sizeof(array3) / sizeof(array3[0]);
+	Matrix<int> arr(2, 2, array3);
 	cout << "Third matrix 'arr': " << arr;
 	triangular_matrix(arr);
-	cout << "Triangular matrix arr is " << arr;*/
+	cout << "Triangular matrix arr is " << arr;
 
 	/*cout << "data type: DOUBLE" << endl;
 	double array1[] = { 1.5,2,1,1, 1, 2, 4, 5, 3 };
-	int size_arr1 = sizeof(array1) / sizeof(array1[0]);
-	Matrix<double> a(3, 3, array1, size_arr1);
+	//int size_arr1 = sizeof(array1) / sizeof(array1[0]);
+	Matrix<double> a(3, 3, array1);
 	double array2[] = { 1.5,2,1,3,1,4,2,1,3 };
-	int size_arr1 = sizeof(array2) / sizeof(array2[0]);
-	Matrix<double> b(3, 3, array2, size_arr2);
+	//int size_arr1 = sizeof(array2) / sizeof(array2[0]);
+	Matrix<double> b(3, 3, array2);
 	cout << "First matrix a: " << a;
 	cout << "Second matrix b: " << b;
 	Matrix<double> c = a + b;
@@ -69,11 +69,11 @@ int main() {
 	/*cout << "data type: COMPLEX<FLOAT>" << endl;
 	std::complex<float> a(1, 1), b(2,2), c(3,3), d(4,4);
 	std::complex<float> mas1[] = { a,b,c,d };
-	int size_mas1 = sizeof(mas1) / sizeof(mas1[0]);
-	Matrix<std::complex<float>> array1(2, 2, mas1, size_mas1);
+	//int size_mas1 = sizeof(mas1) / sizeof(mas1[0]);
+	Matrix<std::complex<float>> array1(2, 2, mas1);
 	std::complex<float> mas2[] = { d, c, b, a };
-	int size_mas1 = sizeof(mas2) / sizeof(mas2[0]);
-	Matrix<std::complex<float>> array2(2, 2, mas2, size_mas2);
+	//int size_mas1 = sizeof(mas2) / sizeof(mas2[0]);
+	Matrix<std::complex<float>> array2(2, 2, mas2);
 	cout << "First matrix a: " << array1;
 	cout << "Second matrix b: " << array2;
 	Matrix<std::complex<float>> array3 = array1 + array2;
